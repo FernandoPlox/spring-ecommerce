@@ -38,7 +38,7 @@
 			<li class="breadcrumb-item active">Ver Productos</li>
 		</ol>
 
-		<a class="btn btn-primary" th:href="@{/productos/create}"> Crear Producto</a>
+		<a class="btn btn-primary" th:href="@{/productos/create}"> Crear Producto</a> <!-- @{} inicia el controlador --> 
 		<h2>Productos</h2>
 		<table class="table">
 			<thead>
@@ -52,14 +52,14 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="p:${productos}">
+				<tr th:each="p:${productos}"> <!-- Crea FILA th:each="p:${productos}" es una directiva de Thymeleaf que permite iterar sobre una lista de productos. -->
 					<td th:text="${p.nombre}"></td>
 					<td th:text="${p.Descripcion}"></td>
 					<td th:text="${p.cantidad}"></td>
 					<td th:text="${p.precio}"></td>
-					<td><a class="btn btn-warning" href="">Editar</a> </td>
+					<td><a class="btn btn-warning" th:href="@{/productos/edit/{id} (id=${p.id})}">Editar</a> </td>
 					<td><a class="btn btn-danger" href="">Eliminar</a> </td>
-				</tr>
+				</tr>  <!-- Cierre de FILA -->
 			</tbody>
 		</table>
 
