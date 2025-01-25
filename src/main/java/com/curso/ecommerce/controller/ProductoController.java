@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.Usuario;
 import com.curso.ecommerce.service.ProductoService;
+import com.curso.ecommerce.service.UploadFileService;
 
 import ch.qos.logback.classic.Logger;
 
@@ -26,6 +27,9 @@ public class ProductoController {
 	
 	@Autowired
 	ProductoService productoService;
+	
+	@Autowired	
+	private UploadFileService upload;
 	
 	@GetMapping("")
 	public String show(Model model) {
