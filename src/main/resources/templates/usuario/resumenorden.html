@@ -30,12 +30,12 @@
 
 		<!-- Page Heading/Breadcrumbs -->
 		<h1 class="mt-4 mb-3">
-			Spring eCommerce <small>Carrito</small>
+			Spring eCommerce <small>Resumen de la orden</small>
 		</h1>
 
 		<ol class="breadcrumb">
 			<li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-			<li class="breadcrumb-item active">Carrito</li>
+			<li class="breadcrumb-item active">Orden</li>
 		</ol>
 
 		<!-- Blog Post -->
@@ -43,39 +43,53 @@
 			<div class="card-body">
 				<div class="row">
 					<div class="col-lg-9">
-						<table class="table">
-							<thead>
-								<tr>
-									<th scope="col">Producto</th>
-									<th scope="col">Precio</th>
-									<th scope="col">Cantidad</th>
-									<th scope="col">Total</th>
-									<th scope="col">Acción</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr th:each="dorden:${cart}">
-									<td th:text="${dorden.nombre}"></td>
-									<td th:text="${dorden.precio}"></td>
-									<td th:text="${dorden.cantidad}"></td>
-									<td th:text="${dorden.total}"></td>
-									<td><a th:href="@{/delete/cart/{id} (id = ${dorden.producto.id})}" class="btn btn-danger">Quitar</a></td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="card-body">
+							<h5 class="card-title">
+								DATOS ORDEN
+							</h5>
+							<h6 th:text=" 'Nombre: ' + ${usuario.nombre}"> </h6>
+							<h6 th:text=" 'Correo: ' + ${usuario.email}"></h6>
+							<h6 th:text=" 'Dirección: ' +${usuario.direccion}"></h6>
+
+							<h5 class="card-title">
+								PRODUCTOS
+							</h5>
+							<div class="alert alert-light" role="alert">
+								<table class="table">
+									<thead>
+										<tr>
+											<th scope="col">Producto</th>
+											<th scope="col">Precio</th>
+											<th scope="col">Cantidad</th>
+											<th scope="col">Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="dtorden:${cart}">
+											<td th:text="${dtorden.nombre}"></td>
+											<td th:text="${dtorden.precio}"></td>
+											<td th:text="${dtorden.cantidad}"></td>
+											<td th:text="${dtorden.total}"></td>
+
+										</tr>
+									</tbody>
+								</table>
+							</div>
+
+						</div>
 					</div>
 
+
 					<div class="col-lg-3">
-						<h2 class="card-title">SUBTOTAL</h2>
+						<h2 class="card-title">Resumen Orden</h2>
 
 						<ul class="list-group">
 							<li class="list-group-item">
-								<h5 th:text="${orden.total}"></h5>
+								<h5 th:text=" 'Total: ' + ${orden.total} "></h5>
 							</li>
-							<a th:href="@{/order}" class="btn btn-dark">Ver Orden</a>
+							<a href="#" class="btn btn-dark">Generar</a>
 						</ul>
 					</div>
-
 				</div>
 			</div>
 		</div>
