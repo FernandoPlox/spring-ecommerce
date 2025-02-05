@@ -57,7 +57,12 @@ public class HomeController {
 	public String home(Model model,HttpSession session) {
 		
 		log.info("Sesion del Usuario: {}", session.getAttribute("idusuario"));
+		
 		model.addAttribute("productos", productoService.findAll());
+		
+		//SESSION
+		model.addAttribute("sesion",session.getAttribute("idusuario"));
+		
 		return "usuario/home";
 	}
 
@@ -138,10 +143,12 @@ public class HomeController {
 	
 	//CONTROLADOR PARA ABRIR/CONSULTAR LA VISTA CARRITO SIN ENVIAR DATOS.
 	@GetMapping("/getCart")
-	public String getCart(Model model) {
+	public String getCart(Model model,HttpSession session) {
 		
 		model.addAttribute("cart", detalles);
 		model.addAttribute("orden", orden);
+		//SESION
+		model.addAttribute("sesion",session.getAttribute("idusuario"));
 		
 		return "usuario/carrito";
 	}
