@@ -1,8 +1,10 @@
 package com.curso.ecommerce.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +21,8 @@ import com.curso.ecommerce.model.DetalleOrden;
 import com.curso.ecommerce.model.Orden;
 import com.curso.ecommerce.model.Producto;
 import com.curso.ecommerce.model.Usuario;
+import com.curso.ecommerce.service.IDetalleOrdenService;
+import com.curso.ecommerce.service.IOrdenService;
 import com.curso.ecommerce.service.IUsuarioService;
 import com.curso.ecommerce.service.ProductoService;
 
@@ -30,23 +34,30 @@ public class HomeController {
 	private final Logger log = LoggerFactory.getLogger(HomeController.class);
 
 	@Autowired
-	private ProductoService productoService;
+	private ProductoService productoService; //SERVICIO PRODUCTO
 	
 	@Autowired
-	private IUsuarioService usuarioService;
+	private IUsuarioService usuarioService; //SERVICIO USUARIO
 	
-	//Para almacenar los detaller de la orden
+	@Autowired
+	private IOrdenService ordenService; // SERVICIO ORDEN
+	
+	@Autowired
+	private IDetalleOrdenService detalleOrdenService; // SERVICIO DETALLE
+	
+	//PARA ALMACENAR LOS DETALLES DE LA ORDEN
 	List<DetalleOrden> detalles = new ArrayList<>();
 	
-	//datos de la orden
+	//DATOS DE LA ORDEN
 	Orden orden = new Orden();
 
-	@GetMapping("")
+	@GetMapping("")//CONTROLADOR QUE LLEVA AL INICIO Y LISTA LOS PRODUCTOS
 	public String home(Model model) {
 		model.addAttribute("productos", productoService.findAll());
 		return "usuario/home";
 	}
 
+	//CONTROLADOR QUE ENVIA UN PRODUCTO A LA VISTA Y LLEVA A VER LA DESCRIPCION DEL PRODUCTO 
 	@GetMapping("productohome/{id}")
 	public String productoHome(@PathVariable Integer id, Model model) {
 		log.info("Id producto enviado como parametro {}", id);
@@ -58,6 +69,8 @@ public class HomeController {
 		return "usuario/productohome";
 	}
 	
+	//CONTROLADOR QUE LLEVA ALA VISTA Y AÑADE UN PRODUCTO AL CARRITO DE COMPRAS
+	//SE ENVIA LA CANTIDAD Y EL PRODUCTO EN EL CUERPO DE LA SOLICITUD POST
 	@PostMapping("/cart")
 	public String addCart(@RequestParam Integer id, @RequestParam Integer cantidad, Model model) {
 		
@@ -94,7 +107,7 @@ public class HomeController {
 		return "usuario/carrito";
 	}
 	
-	//Quitar unb Producto de un carrito
+	//QUITAR UN PRODUCTO DE UN CARRITO
 	@GetMapping("/delete/cart/{id}")
 	public String deleteProductoCart(@PathVariable Integer id,Model model) {
 	
@@ -105,7 +118,7 @@ public class HomeController {
 				ordenesNueva.add(detalleOrden);
 			}
 		}
-		//poner la nueva lista con los productos restantes
+		//PONER LA NUEVA LISTA CON LOS PRODUCTOS RESTANTES
 		detalles = ordenesNueva;
 		
 		double sumaTotal = 0;
@@ -119,6 +132,7 @@ public class HomeController {
 		return "usuario/carrito";
 	}
 	
+	//CONTROLADOR PARA ABRIR/CONSULTAR LA VISTA CARRITO SIN ENVIAR DATOS.
 	@GetMapping("/getCart")
 	public String getCart(Model model) {
 		
@@ -127,6 +141,7 @@ public class HomeController {
 		
 		return "usuario/carrito";
 	}
+	
 	
 	@GetMapping("/order")
 	public String order(Model model) {
@@ -138,6 +153,47 @@ public class HomeController {
 		model.addAttribute("usuario",usuario);
 		
 		return "usuario/resumenorden";
+	}
+	
+	//CONTROLADOR PARA GUARDAR LA ORDEN
+	@GetMapping("/saveOrder")
+	public String saveOrder() {
+		
+		Date fechaCreacion = new Date();
+		orden.setFechaCreacion(fechaCreacion);
+		orden.setNumero(ordenService.generarNumeroOrden());
+		
+		//USUARIO
+		Usuario usuario = usuarioService.findById(1).get();
+		
+		orden.setUsuario(usuario);
+		ordenService.save(orden);
+		
+		//GUARADAR DETALLES
+		for (DetalleOrden dt : detalles) {
+			dt.setOrden(orden);
+			detalleOrdenService.save(dt);
+		}
+		
+		//LIMPIEZA LISTA Y ORDEN
+		orden = new Orden();
+		detalles.clear();
+		
+		
+		
+		return "redirect:/";
+	}
+	
+	@PostMapping("/search")
+	public String searchProduct(@RequestParam String nombre,Model model) {
+		
+		log.info("Nombre del produto: {}", nombre);
+		List<Producto> productos = productoService.findAll().stream().filter(p -> p.getNombre().contains(nombre)).collect(Collectors.toList());
+		
+		model.addAttribute("productos",productos);
+		
+		
+		return "usuario/home";
 	}
 
 }

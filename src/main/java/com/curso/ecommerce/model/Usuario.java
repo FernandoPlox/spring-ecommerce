@@ -29,6 +29,7 @@ public class Usuario {
 	
 	@OneToMany(mappedBy = "usuario")
 	private List<Orden> ordenes;
+	
 
 	public Usuario() {
 		super();

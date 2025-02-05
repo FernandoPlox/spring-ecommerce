@@ -6,6 +6,7 @@ import com.curso.ecommerce.model.Usuario;
 
 public interface IUsuarioService {
 	
+	//BUSCAR USUARIO POR ID
 	Optional<Usuario> findById(Integer id);
 	
 

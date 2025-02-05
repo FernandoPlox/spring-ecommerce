@@ -1,5 +1,6 @@
 package com.curso.ecommerce.model;
 
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,6 +23,7 @@ public class Producto {
 
 	@ManyToOne
 	private Usuario usuario;
+	
 
 	@Override
 	public String toString() {
