@@ -9,5 +9,7 @@ public interface IUsuarioService {
 	//BUSCAR USUARIO POR ID
 	Optional<Usuario> findById(Integer id);
 	
+	Usuario save(Usuario usuario);
+	
 
 }
