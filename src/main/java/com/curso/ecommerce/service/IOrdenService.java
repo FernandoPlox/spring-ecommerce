@@ -3,6 +3,7 @@ package com.curso.ecommerce.service;
 import java.util.List;
 
 import com.curso.ecommerce.model.Orden;
+import com.curso.ecommerce.model.Usuario;
 
 public interface IOrdenService {
 	
@@ -12,4 +13,6 @@ public interface IOrdenService {
 	public Orden save(Orden orden);
 	
 	public String generarNumeroOrden();
+	
+	public List<Orden> findByUsuario(Usuario usuario);
 }
