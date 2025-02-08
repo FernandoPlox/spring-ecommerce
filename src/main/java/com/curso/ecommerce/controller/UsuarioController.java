@@ -24,7 +24,7 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/usuario")
 public class UsuarioController {
 	
-	private final Logger log = LoggerFactory.getLogger(HomeController.class);
+	private final Logger log = LoggerFactory.getLogger(UsuarioController.class);
 	
 	@Autowired
 	private IUsuarioService usuarioService;
